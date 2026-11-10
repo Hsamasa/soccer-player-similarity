@@ -49,7 +49,7 @@ def build_leaderboard(players, min_minutes=MIN_MINUTES_LEADERBOARD):
         subset["rank_in_position"] = subset["composite_score"].rank(ascending=False, method="min").astype(int)
         frames.append(subset)
 
-    columns = ["position_group", "rank_in_position", "display_name", "team", "competitions",
+    columns = ["position_group", "rank_in_position", "display_name", "team",
                "matches", "minutes", "composite_score"]
     leaderboard = pd.concat(frames)[columns]
     return leaderboard.sort_values(["position_group", "rank_in_position"]).reset_index(drop=True)

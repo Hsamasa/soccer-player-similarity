@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from src.config import COMPETITIONS
+
 # A readable subset of the features for the chart. All are percentiles within position group.
 RADAR_FEATURES = {
     "np_xg_p90": "npxG",
@@ -47,9 +49,10 @@ def plot_radar(percentiles, player_a, player_b, path):
     ax.set_yticks([25, 50, 75])
     ax.set_yticklabels(["25th", "50th", "75th"], fontsize=7, color="grey")
     group = percentiles.loc[percentiles["display_name"] == player_a, "position_group"].iloc[0]
-    ax.set_title(f"Percentile vs. other {group.lower()}s (per 90)", fontsize=11, pad=18)
+    ax.set_title(f"Percentile among Premier League {group.lower()} players (per 90)", fontsize=11, pad=18)
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.06), ncol=1, frameon=False, fontsize=9)
-    fig.text(0.5, 0.01, "Data: StatsBomb Open Data (World Cup 2022, Euro 2024, Copa America 2024)",
+    competitions = ", ".join(label for _, _, label in COMPETITIONS)
+    fig.text(0.5, 0.01, f"Data: StatsBomb Open Data ({competitions})",
              ha="center", fontsize=7, color="grey")
     fig.tight_layout()
     fig.savefig(path, dpi=150)
