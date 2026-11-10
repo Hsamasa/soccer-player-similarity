@@ -1,0 +1,15 @@
+# Raw StatsBomb JSON (400+ MB) and the full processed table are rebuilt by the pipeline
+data/raw/
+data/processed/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# OS / editors
+.DS_Store
+.vscode/
+.idea/
