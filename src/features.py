@@ -191,11 +191,12 @@ def build_player_table(matches, match_data):
         for player_id, details in played.items():
             entry = info.setdefault(player_id, {
                 "player_id": player_id, "player_name": details["name"], "display_name": details["nickname"],
-                "team": details["team"],
+                "team_minutes": defaultdict(float),
                 "minutes": 0.0, "matches": 0, "position_minutes": defaultdict(float),
                 "competitions": set(),
             })
             entry["minutes"] += details["minutes"]
+            entry["team_minutes"][details["team"]] += details["minutes"]
             entry["matches"] += 1
             entry["competitions"].add(match["competition_label"])
             for position, minutes in details["position_minutes"].items():
@@ -220,7 +221,8 @@ def build_player_table(matches, match_data):
             "player_id": player_id,
             "player_name": entry["player_name"],
             "display_name": entry["display_name"],
-            "team": entry["team"],
+            # A player who moved clubs mid-season is listed under the club he played most for.
+            "team": max(entry["team_minutes"], key=entry["team_minutes"].get),
             "competitions": "; ".join(sorted(entry["competitions"])),
             "matches": entry["matches"],
             "minutes": round(entry["minutes"], 1),

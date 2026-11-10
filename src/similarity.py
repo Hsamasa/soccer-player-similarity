@@ -48,15 +48,21 @@ class SimilarityModel:
         options = ", ".join(self.pool.loc[partial, "display_name"].head(10))
         raise ValueError(f"'{name}' matches several players: {options}. Be more specific.")
 
-    def most_similar(self, name, n=5, same_position_group=True):
-        """Return the n players most similar to `name`, highest cosine similarity first."""
+    def most_similar(self, name, n=5, same_position_group=True, exclude_teammates=True):
+        """Return the n players most similar to `name`, highest cosine similarity first.
+
+        Teammates are excluded by default: the scouting question is who at OTHER clubs plays
+        like this player, and teammates share a system that makes their numbers look alike.
+        """
         index = self.find_player(name)
         scores = pd.Series(self.similarity[index], index=self.pool.index)
         candidates = self.pool.index != index
         if same_position_group:
             candidates &= self.pool["position_group"] == self.pool.loc[index, "position_group"]
+        if exclude_teammates:
+            candidates &= self.pool["team"] != self.pool.loc[index, "team"]
         top = scores[candidates].sort_values(ascending=False).head(n)
 
-        result = self.pool.loc[top.index, ["display_name", "team", "position_group", "competitions", "minutes"]].copy()
+        result = self.pool.loc[top.index, ["display_name", "team", "position_group", "minutes"]].copy()
         result.insert(0, "similarity", np.round(top.values, 3))
         return result.reset_index(drop=True)
