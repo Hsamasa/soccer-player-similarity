@@ -11,16 +11,17 @@ OUTPUT_DIR = ROOT / "outputs"
 STATSBOMB_BASE_URL = "https://raw.githubusercontent.com/statsbomb/open-data/master/data"
 
 # (competition_id, season_id, label) from StatsBomb's competitions.json.
-# Three men's international tournaments from 2022 to 2024, each with every match released.
+# The full 2015/16 Premier League season: all 380 matches are in the open data.
 COMPETITIONS = [
-    (43, 106, "FIFA World Cup 2022"),
-    (55, 282, "UEFA Euro 2024"),
-    (223, 282, "Copa America 2024"),
+    (2, 27, "Premier League 2015/16"),
 ]
 
-# Players need this many minutes (summed across all three tournaments) to enter
-# the similarity pool. Per-90 rates on fewer minutes are mostly noise.
-MIN_MINUTES_SIMILARITY = 180
+# The club the project focuses on: examples, radar charts and the squad table.
+FOCUS_TEAM = "Manchester City"
 
-# A stricter cut for the leaderboard (four full matches), since a ranking invites direct comparison.
-MIN_MINUTES_LEADERBOARD = 360
+# Players need this many minutes (10 full matches) to enter the similarity pool.
+# Per-90 rates on fewer minutes are mostly noise.
+MIN_MINUTES_SIMILARITY = 900
+
+# A stricter cut for the leaderboard (15 full matches), since a ranking invites direct comparison.
+MIN_MINUTES_LEADERBOARD = 1350
